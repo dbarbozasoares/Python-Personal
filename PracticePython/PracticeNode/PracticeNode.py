@@ -10,45 +10,50 @@ class Node:
         
 class DoublyLinkedList:           
     def __init__(self):
-        self.front = None
-        self.back = None
+        self.front = Node(None)
+        self.back = Node(None)
+        self.front.next = self.back
+        self.back.prev = self.front
         
     def push_front(self, data):
-        nn = Node(data, self.front)
-        if self.front is None:
-            self.back = nn
+        nn = Node(data, self.front.next, self.front)
+        if self.front.next == self.back:
+            self.back.prev = nn
         else:
-            self.front.prev = nn
+            self.front.next.prev = nn
         
-        self.front = nn
+        self.front.next = nn
         self.sort()
         
     def pop_front(self):
-        if self.front is not None:
-            rm = self.front
-            self.front = self.front.next
-        if self.front is None:
-            self.back = None
+        if self.front.next == self.back:
+            print("List is empty!")
+            return
+        rm = self.front.next
+        self.front.next = rm.next
+        if self.front.next:
+            self.front.next.prev = self.front
         else:
-            self.front.prev = None
+            self.back.prev = self.front
         del rm
         
     def print_list(self):
-        current = self.front
-        while current:
-            print(current.data, end=" <--> ")
+        current = self.front.next
+        while current != self.back:
+            print(current.data, end=" <--> ")    
             current = current.next
         print("END")
         
     def sort(self):
-        if self.front is None:
+        if self.front.next == self.back:
             return
         swapped = True
         while swapped:
             swapped = False
-            current = self.front
-            while current and current.next:
-                if current.data > current.next.data:
+            current = self.front.next
+            while current != self.back:
+                if current.next != self.back and current.data > current.next.data:
+                    # Swap the data if current node's data is greater than the next node's data
                     temp = current.data
                     current.data = current.next.data
                     current.next.data = temp
@@ -82,7 +87,7 @@ def find_max(nod):
     return n_max
 
 def update_data(node, target, value):
-    current = node.front
+    current = node.front.next
     if current is None:
         return None
     while current:
@@ -155,6 +160,7 @@ def main():
         print('#1 Add')
         print('#2 Update')
         print('#3 Remove')
+        print('#4 Pop')
         print('#9 Print')
         print('#0 Quit')
         opt = int(input("Select: "))
@@ -172,6 +178,9 @@ def main():
         if opt == 3:
             rm = float(input('Insert number to remove: '))
             remove_data(list_target, rm)
+            list_target.print_list()
+        if opt == 4:
+            list_target.pop_front()
             list_target.print_list()
         if opt == 9:
             list_target.print_list()
