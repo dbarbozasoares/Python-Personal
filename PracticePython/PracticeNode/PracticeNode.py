@@ -23,7 +23,6 @@ class DoublyLinkedList:
             self.front.next.prev = nn
         
         self.front.next = nn
-        self.sort()
         
     def pop_front(self):
         if self.front.next == self.back:
@@ -59,6 +58,7 @@ class DoublyLinkedList:
                     current.next.data = temp
                     swapped = True
                 current = current.next
+                
     
 def find_value(current,value):
     
@@ -73,6 +73,7 @@ def find_value(current,value):
         index +=1
     print("Number does not exist in list")
     return -1
+
 def find_max(nod):
     n_max = 0
     node = nod.front
@@ -86,6 +87,7 @@ def find_max(nod):
             
     return n_max
 
+#UPDATE NODE BY PARAMETER
 def update_data(node, target, value):
     current = node.front.next
     if current is None:
@@ -98,7 +100,8 @@ def update_data(node, target, value):
         current = current.next
         
     return False
-    
+
+# REMOVE NODE BY SECOND PARAMETER
 def remove_data(node, num):
     if node.front is None:
         return None
@@ -122,10 +125,7 @@ def remove_data(node, num):
                 current.next.prev = current.prev
         current = current.next
         
-        
-
-
-def main():
+def menuNumbers():
     tst2 = DoublyLinkedList()
     tst2.push_front(15)
     tst2.push_front(5)
@@ -144,7 +144,6 @@ def main():
     tst.push_front(105)
     tst.push_front(0.1)
     tst.push_front(0.01)
-    
     run = True
     list_target = None
     while run is True:
@@ -184,12 +183,58 @@ def main():
             list_target.print_list()
         if opt == 9:
             list_target.print_list()
-            
-            
-            
 
-        
-        
+def menuCars():
+    cars = DoublyLinkedList()
+    run = True
+    new_car = Car("Honda", "Civic", 2025, 26749)
+    new_car2 = Car("Honda", "Civic", 2023, 17900)
+    cars.push_front(new_car)
+    cars.push_front(new_car2)
+    
+    while run is True:
+        print('Choose option')
+        print('#1 Print')
+        print('#2 Add')
+        print('#3 Update')
+        print('#4 Remove')
+        print('#5 Pop')
+        print('#0 Quit')
+        opt = int(input('Select: '))
+        if opt == 0:
+            run = False
+        elif opt == 1:
+            printCarList(cars)
+            
+    
+
+class Car:
+    def __init__(self, brand = "Empty", model = "Empty", year=0, price=0.00):
+        self.brand = brand
+        self.model = model
+        self.year = year
+        self.price = price
+    def setPrice(self, new_price):
+        self.price = new_price
+    def isCarInsideRange(self, year):
+        return self.year >= year
+    
+def printCarList(carList):
+    car = carList.front.next
+    
+    while car.next is not None:
+        print('#BRAND = ', car.data.brand)
+        print('#MODEL = ', car.data.model)
+        print('#YEAR  = ', car.data.year)
+        print('#PRICE = ', car.data.price)
+        print('===========================')
+        car = car.next
+       
+
+def main():
+    menuCars()
+    
+
             
 if __name__ == "__main__":
     main()
