@@ -1,34 +1,49 @@
-def main():
-    nums = [1,2,3,1,1,3]
-    res = {}
-    index_pairs = []
-    pairs = 0
+class Graph:
+    def __init__(self, edges):
+        self.edges = edges
+        self.graph_dict = {}
+        for start, end in self.edges:
+            if start in self.graph_dict:
+                self.graph_dict[start].append(end)
+            else:
+                self.graph_dict[start] = [end]
+    def getPaths(self,start,end,path=[]):
+        if path is None:
+            path = []
+        path += [start]
+        if start == end:
+            return [path]
+        if start not in self.graph_dict:
+            return []
+        
+        paths = []
+        for node in self.graph_dict[start]:
+            if node not in path:
+                new_paths = self.getPaths(node,end,path)
+                for p in new_paths:
+                    paths.append(p)
+                    
+        return paths    
+
     
-    # O(N^2) NOT VERY GOOD TOO SLOW
-    # for i in range(len(nums)):
-        # for j in range(i+1,len(nums)):
-            # if nums[i] == nums[j]:
-                # res.append([i,j])
-                
-    # O(n) better and do in 1 go
-    # for num in nums:
-        # if num in res:
-            # pairs+= res[num]
-            # res[num]+=1
-        # else:
-            # res[num] = 1
-        # print(res)
-        
-    for i,num in enumerate(nums):
-        if num in res:
-            for prev_index in res[num]: # for each index appended into this position (chaining)
-                index_pairs.append((prev_index, i))
-            res[num].append(i) # now this become a prev index so we can access later
-        else:
-            res[num] = [i] # otherwise just append the index so it also become prev index in the future
-            
-        
-    print(index_pairs)
-    print(len(index_pairs))    
+
+
+def main():
+    routes = [
+        ("Mumbai", "Paris"),
+        ("Mumbai", "Dubai"),
+        ("Paris", "Dubai"),
+        ("Paris", "New York"),
+        ("Dubai", "New York"),
+        ("New York", "Toronto"),
+        ("Toronto", "Paris")
+    ]
+    
+    start = "Mumbai"
+    end = "New York"
+    route_graph = Graph(routes)
+    print(route_graph.getPaths(start,end))
+
+
 if __name__ == "__main__":
     main()
